@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ConferencePlanner.GraphQL.Data;
 using GraphQl.DataLoader;
+using GraphQl.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +26,10 @@ namespace GraphQl
                 .AddGraphQLServer()
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
-                .AddDataLoader<SpeakerByIdDataLoader>();
+                .AddDataLoader<SpeakerByIdDataLoader>()
+                .AddDataLoader<SessionByIdDataLoader>()
+                .AddType<SpeakerTypes>()
+                ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
