@@ -8,6 +8,7 @@ using GraphQl.Data;
 using GraphQl.DataLoader;
 using GraphQl.Extentions;
 using HotChocolate;
+using HotChocolate.Resolvers;
 using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,11 @@ namespace GraphQl.Types
     {
         protected override void Configure(IObjectTypeDescriptor<Speaker> descriptor)
         {
+            descriptor
+                .ImplementsNode()
+                .IdField(t => t.Id)
+                .ResolveNode((ctx, id) => ctx.DataLoader<SpeakerByIdDataLoader>().LoadAsync(id, ctx.RequestAborted));
+
             descriptor
                 .Field(t => t.SessionSpeakers)
                 .ResolveWith<SpeakerResolvers>(t => t.GetSessionsAsync(default!, default!, default!, default))

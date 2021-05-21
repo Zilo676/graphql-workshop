@@ -24,13 +24,16 @@ namespace GraphQl
 
             services
                 .AddGraphQLServer()
+                .EnableRelaySupport()
                 .AddQueryType<Query>()
                 .AddMutationType(d=>d.Name("Mutation"))
-                .AddTypeExtension<SpeakerTypes>()
+                    .AddTypeExtension<SpeakerMutations>()
 
+                .AddType<SpeakerTypes>()
                 .AddDataLoader<SpeakerByIdDataLoader>()
                 .AddDataLoader<SessionByIdDataLoader>()
-                .AddType<SpeakerTypes>()
+
+
                 ;
         }
 

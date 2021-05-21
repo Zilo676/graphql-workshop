@@ -6,6 +6,7 @@ using HotChocolate;
 using ConferencePlanner.GraphQL.Data;
 using GraphQl.DataLoader;
 using GraphQl.Extentions;
+using HotChocolate.Types.Relay;
 using Microsoft.EntityFrameworkCore;
 
 namespace GraphQl
@@ -16,8 +17,9 @@ namespace GraphQl
         public Task<List<Speaker>> GetSpeakers([ScopedService] ApplicationDbContext context) => context.Speakers.ToListAsync();
 
         public Task<Speaker> GetSpeakerAsync(
-            int id,
+            [ID(nameof(Speaker))] int id,
             SpeakerByIdDataLoader dataLoader,
-            CancellationToken token) => dataLoader.LoadAsync(id, token);
+            CancellationToken cancellationToken) =>
+            dataLoader.LoadAsync(id, cancellationToken);
     }
 }
