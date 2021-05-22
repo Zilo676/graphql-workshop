@@ -6,12 +6,14 @@ using HotChocolate;
 using ConferencePlanner.GraphQL.Data;
 using GraphQl.DataLoader;
 using GraphQl.Extentions;
+using HotChocolate.Types;
 using HotChocolate.Types.Relay;
 using Microsoft.EntityFrameworkCore;
 
 namespace GraphQl
 {
-    public class Query
+    [ExtendObjectType(Name = "Query")]
+    public class SpeakerQueries
     {
         [UseApplicationDbContext]
         public Task<List<Speaker>> GetSpeakers([ScopedService] ApplicationDbContext context) => context.Speakers.ToListAsync();

@@ -24,17 +24,15 @@ namespace GraphQl
 
             services
                 .AddGraphQLServer()
-                .EnableRelaySupport()
-                .AddQueryType<Query>()
-                .AddMutationType(d=>d.Name("Mutation"))
-                    .AddTypeExtension<SpeakerMutations>()
-
+                .AddQueryType(d => d.Name("Query"))
+                .AddTypeExtension<SpeakerQueries>()
+                .AddMutationType(d => d.Name("Mutation"))
+                .AddTypeExtension<SpeakerMutations>()
+                .AddType<AttendeeType>()
+                .AddType<SessionType>()
                 .AddType<SpeakerTypes>()
-                .AddDataLoader<SpeakerByIdDataLoader>()
-                .AddDataLoader<SessionByIdDataLoader>()
-
-
-                ;
+                .AddType<TrackType>()
+                .EnableRelaySupport();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
