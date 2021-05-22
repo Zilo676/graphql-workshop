@@ -18,6 +18,7 @@ namespace GraphQl.Types
     {
         protected override void Configure(IObjectTypeDescriptor<Track> descriptor)
         {
+
             descriptor
                 .ImplementsNode()
                 .IdField(t => t.Id)
@@ -28,7 +29,13 @@ namespace GraphQl.Types
                 .Field(t => t.Sessions)
                 .ResolveWith<TrackResolvers>(t => t.GetSessionsAsync(default!, default!, default!, default))
                 .UseDbContext<ApplicationDbContext>()
+                .UsePaging<NonNullType<SessionType>>()
                 .Name("sessions");
+
+            descriptor
+                .Field(t => t.Name)
+                .UseUpperCase();
+
         }
 
         private class TrackResolvers

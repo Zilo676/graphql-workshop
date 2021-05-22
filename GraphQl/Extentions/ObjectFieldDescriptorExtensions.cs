@@ -17,5 +17,20 @@ namespace GraphQl.Extentions
                 create: s => s.GetRequiredService<IDbContextFactory<TDbContext>>().CreateDbContext(),
                 disposeAsync: (_, c) => c.DisposeAsync());
         }
+
+
+        public static IObjectFieldDescriptor UseUpperCase(
+            this IObjectFieldDescriptor descriptor)
+        {
+            return descriptor.Use(next => async context =>
+            {
+                await next(context);
+                if (context.Result is string s)
+                {
+                    context.Result = s.ToUpperInvariant();
+                }
+            });
+        }
+
     }
 }

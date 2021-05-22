@@ -8,11 +8,13 @@ using GraphQl.Data;
 using GraphQl.DataLoader;
 using GraphQl.Extentions;
 using HotChocolate;
+using HotChocolate.Types;
 using HotChocolate.Types.Relay;
 using Microsoft.EntityFrameworkCore;
 
 namespace GraphQl.Tracks
 {
+    [ExtendObjectType(Name = "Query")]
     public class TrackQueries
     {
         [UseApplicationDbContext]
