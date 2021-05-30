@@ -8,9 +8,12 @@ using GraphQl.Common;
 using GraphQl.Data;
 using GraphQl.Extentions;
 using HotChocolate;
+using HotChocolate.Subscriptions;
+using HotChocolate.Types;
 
 namespace GraphQl.Sessions
 {
+    [ExtendObjectType(Name = "Mutation")]
     public class SessionMutations
     {
         [UseApplicationDbContext]
@@ -54,7 +57,8 @@ namespace GraphQl.Sessions
         [UseApplicationDbContext]
         public async Task<ScheduleSessionPayload> ScheduleSessionAsync(
             ScheduleSessionInput input,
-            [ScopedService] ApplicationDbContext context)
+            [ScopedService] ApplicationDbContext context,
+            [Service] ITopicEventSender eventSender)
         {
             if (input.EndTime < input.StartTime)
             {
@@ -76,6 +80,10 @@ namespace GraphQl.Sessions
             session.EndTime = input.EndTime;
 
             await context.SaveChangesAsync();
+
+            await eventSender.SendAsync(
+                nameof(SessionSubscriptions.OnSessionScheduledAsync),
+                session.Id);
 
             return new ScheduleSessionPayload(session);
         }
