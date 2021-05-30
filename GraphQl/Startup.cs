@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConferencePlanner.GraphQL.Data;
+using GraphQl.Attendees;
 using GraphQl.DataLoader;
 using GraphQl.Sessions;
 using GraphQl.Tracks;
@@ -27,6 +28,7 @@ namespace GraphQl
             services
                 .AddGraphQLServer()
                 .AddQueryType(d => d.Name("Query"))
+                    .AddTypeExtension<AttendeeQueries>()
                     .AddTypeExtension<SessionQueries>()
                     .AddTypeExtension<SpeakerQueries>()
                     .AddTypeExtension<TrackQueries>()
@@ -34,6 +36,7 @@ namespace GraphQl
                     .AddTypeExtension<SessionMutations>()
                     .AddTypeExtension<SpeakerMutations>()
                     .AddTypeExtension<TrackMutations>()
+                    .AddTypeExtension<AttendeeMutations>()
                 .AddType<AttendeeType>()
                 .AddType<SessionType>()
                 .AddType<SpeakerTypes>()
