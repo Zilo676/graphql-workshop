@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,21 +6,22 @@ using ConferencePlanner.GraphQL.Data;
 using GraphQl.Data;
 using GraphQl.DataLoader;
 using GraphQl.Extentions;
+using GraphQl.Types;
 using HotChocolate;
 using HotChocolate.Types;
 using HotChocolate.Types.Relay;
 using Microsoft.EntityFrameworkCore;
 
-namespace GraphQl
+namespace GraphQl.Sessions
 {
     [ExtendObjectType(Name = "Query")]
     public class SessionQueries
     {
         [UseApplicationDbContext]
-        public async Task<IEnumerable<Session>> GetSessionsAsync(
-            [ScopedService] ApplicationDbContext context,
-            CancellationToken cancellationToken) =>
-            await context.Sessions.ToListAsync(cancellationToken);
+        [UsePaging(typeof(NonNullType<SessionType>))]
+        public IQueryable<Session> GetSessions(
+            [ScopedService] ApplicationDbContext context) =>
+            context.Sessions;
 
         public Task<Session> GetSessionByIdAsync(
             [ID(nameof(Session))] int id,

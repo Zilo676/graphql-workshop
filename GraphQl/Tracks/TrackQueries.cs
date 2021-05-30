@@ -18,10 +18,10 @@ namespace GraphQl.Tracks
     public class TrackQueries
     {
         [UseApplicationDbContext]
-        public async Task<IEnumerable<Track>> GetTracksAsync(
-            [ScopedService] ApplicationDbContext context,
-            CancellationToken cancellationToken) =>
-            await context.Tracks.ToListAsync(cancellationToken);
+        [UsePaging]
+        public IQueryable<Track> GetTracks(
+            [ScopedService] ApplicationDbContext context) =>
+            context.Tracks.OrderBy(x => x.Name);
 
         [UseApplicationDbContext]
         public Task<Track> GetTrackByNameAsync(

@@ -16,9 +16,10 @@ namespace GraphQl
     public class SpeakerQueries
     {
         [UseApplicationDbContext]
-        public Task<List<Speaker>> GetSpeakersAsync(
+        [UsePaging]
+        public IQueryable<Speaker> GetSpeakers(
             [ScopedService] ApplicationDbContext context) =>
-            context.Speakers.ToListAsync();
+            context.Speakers.OrderBy(x => x.Name);
 
         public Task<Speaker> GetSpeakerByIdAsync(
             [ID(nameof(Speaker))] int id,
